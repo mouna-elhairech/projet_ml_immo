@@ -1,8 +1,20 @@
+import os
+import subprocess
+import sys
+
 import joblib
 import numpy as np
 import streamlit as st
 
-model = joblib.load("model.pkl")
+
+@st.cache_resource
+def load_model():
+    if not os.path.exists("model.pkl"):
+        subprocess.run([sys.executable, "src/train.py"], check=True)
+    return joblib.load("model.pkl")
+
+
+model = load_model()
 
 st.title("Estimation Immobilière")
 
